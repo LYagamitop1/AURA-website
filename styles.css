@@ -46,7 +46,7 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
 
 .logo { font-family: 'Playfair Display', serif; font-size: 1.75rem; font-weight: 600; letter-spacing: 0.3em; color: var(--text-dark); margin-left: 5px;}
 
-.nav-menu { display: flex; list-style: none; gap: 3rem; }
+.nav-menu { display: flex; list-style: none; gap: 3rem;}
 
 .nav-link { font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-light); position: relative; }
 
@@ -56,7 +56,7 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
 
 .nav-link:hover::after, .nav-link.active::after { width: 100%; }
 
-.nav-icons { display: flex; gap: 1.5rem; }
+.nav-icons { display: flex; gap: 1.5rem; margin-right: 5px; }
 
 .icon-link { font-size: 1.25rem; color: var(--text-light); }
 
@@ -265,7 +265,18 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
 
 }
 
-@media (max-width: 768px) { .hamburger { display: flex; }
+@media (max-width: 768px) { 
+    
+.hamburger { display: flex; margin-right: 5px;}
+
+.nav-icons{
+    gap: 1rem;
+    position: absolute;
+    right: 0px;
+    margin-right: 46px;
+    
+
+}
 
 
 .nav-menu {
