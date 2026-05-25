@@ -6,7 +6,7 @@
 
 html { scroll-behavior: smooth; }
 
-body { font-family: 'Inter', sans-serif; font-size: 16px; line-height: 1.7; color: var(--text-dark); background-color: var(--bg-primary); overflow-x: hidden; }
+body { font-family: 'Inter', sans-serif; font-size: 16px; line-height: 1.7; color: var(--text-dark); background-color: var(--bg-primary); overflow-x: hidden; cursor: none; }
 
 .container { width: 100%; max-width: 1400px; margin: 0 auto; padding: 0 40px; }
 
@@ -22,7 +22,7 @@ h4 { font-size: 1.125rem; font-weight: 600; }
 
 p { margin-bottom: 1.5rem; color: var(--text-light); }
 
-a { text-decoration: none; color: inherit; transition: var(--transition); }
+a { text-decoration: none; color: inherit; transition: var(--transition); cursor: none; }
 
 /* Preloader */ .preloader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-primary); display: flex; align-items: center; justify-content: center; z-index: 9999; transition: opacity 0.8s ease; }
 
@@ -62,7 +62,7 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
 
 .icon-link:hover { color: var(--primary); }
 
-.hamburger { display: none; flex-direction: column; cursor: pointer; gap: 6px; }
+.hamburger { display: none; flex-direction: column; gap: 6px; }
 
 .bar { width: 25px; height: 1px; background: var(--text-dark); transition: var(--transition); }
 
@@ -84,7 +84,7 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
 
 .hero-buttons { display: flex; gap: 1.5rem; justify-content: center; margin-top: 2rem; }
 
-.btn { padding: 1.25rem 3rem; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.15em; border: none; cursor: pointer; transition: var(--transition); font-family: 'Inter', sans-serif; font-weight: 500; }
+.btn { padding: 1.25rem 3rem; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.15em; border: none; transition: var(--transition); font-family: 'Inter', sans-serif; font-weight: 500; }
 
 .btn-primary { background: var(--primary); color: var(--bg-primary); }
 
@@ -160,7 +160,7 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
 
 .product-price { padding: 0 1.5rem 1rem; color: var(--primary); font-weight: 600; font-size: 1.25rem; }
 
-.btn-add { width: calc(100% - 3rem); margin: 0 1.5rem 1.5rem; padding: 0.75rem; background: var(--primary); color: var(--bg-primary); border: none; cursor: pointer; text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.8rem; transition: var(--transition); }
+.btn-add { width: calc(100% - 3rem); margin: 0 1.5rem 1.5rem; padding: 0.75rem; background: var(--primary); color: var(--bg-primary); border: none; text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.8rem; transition: var(--transition); }
 
 .btn-add:hover { background: var(--primary-dark); }
 
