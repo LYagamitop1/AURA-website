@@ -6,9 +6,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"> 
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700\&family=Inter:wght@300;400;500;600\&family=Cormorant+Garamond:wght@300;400;500\&display=swap" rel="stylesheet"> 
-<link rel="stylesheet" href="styles.css"> 
-
-</head> 
+<link rel="stylesheet" href="styles.css">
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+</head>
 
 
 <body>
@@ -38,7 +38,7 @@
         </ul>
         <div class="nav-icons">
             <a href="#" class="icon-link">🛍️</a>
-            <a href="#" class="icon-link">👤</a>
+            <a href="#" class="icon-link" id="profile-icon">👤</a>
         </div>
         <div class="hamburger">
             <span class="bar"></span>
@@ -275,6 +275,102 @@
     </div>
 </footer>
 
+<!-- Auth Modal -->
+<div class="auth-overlay" id="auth-overlay">
+    <div class="auth-modal">
+        <button class="auth-close" id="auth-close">&times;</button>
+        <div class="auth-form-container" id="auth-form-container">
+            <div class="auth-header">
+                <div class="auth-logo">AURA</div>
+                <p class="auth-subtitle">Elevate Your Inner Light</p>
+            </div>
+            <div class="auth-tabs">
+                <button class="auth-tab active" data-tab="login">Sign In</button>
+                <button class="auth-tab" data-tab="signup">Create Account</button>
+            </div>
+            <form class="auth-form" id="login-form">
+                <div class="auth-form-group">
+                    <input type="email" placeholder="Email" required>
+                </div>
+                <div class="auth-form-group">
+                    <input type="password" placeholder="Password" required>
+                </div>
+                <button type="submit" class="btn btn-primary auth-submit">Sign In</button>
+                <p class="auth-error" id="auth-error"></p>
+                <button type="button" class="auth-forgot-btn" id="forgot-btn">Forgot Password?</button>
+            </form>
+            <form class="auth-form hidden" id="signup-step1">
+                <div class="auth-form-group">
+                    <input type="text" name="name" placeholder="Full Name" required>
+                </div>
+                <div class="auth-form-group">
+                    <input type="email" name="email" placeholder="Email" required>
+                </div>
+                <div class="auth-form-group">
+                    <input type="password" name="password" placeholder="Password" minlength="6" required>
+                </div>
+                <div class="auth-form-row">
+                    <div class="auth-form-group">
+                        <input type="number" name="age" placeholder="Age (10-80)" min="10" max="80" required>
+                    </div>
+                    <div class="auth-form-group">
+                        <select name="gender" required>
+                            <option value="" disabled selected>Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary auth-submit">Create Account</button>
+                <p class="auth-error" id="auth-error-signup"></p>
+            </form>
+            <div class="auth-form hidden" id="signup-step2">
+                <p class="auth-otp-info">Enter the 6-digit code sent to <span id="signup-email-display"></span></p>
+                <div class="auth-otp-row">
+                    <input type="text" class="auth-otp-input" id="signup-otp" placeholder="000000" maxlength="6" inputmode="numeric" pattern="[0-9]*">
+                </div>
+                <button class="btn btn-primary auth-submit" id="signup-verify-btn">Verify Email</button>
+                <p class="auth-error" id="auth-error-otp"></p>
+                <button type="button" class="auth-back-btn" id="signup-back-btn">← Back</button>
+            </div>
+            <div class="auth-form hidden" id="forgot-form">
+                <div id="forgot-step1">
+                    <p class="auth-otp-info">Enter your email to receive a reset code.</p>
+                    <div class="auth-form-group">
+                        <input type="email" id="forgot-email" placeholder="Email" required>
+                    </div>
+                    <button class="btn btn-primary auth-submit" id="forgot-send-btn">Send Reset Code</button>
+                    <p class="auth-error" id="auth-error-forgot"></p>
+                    <button type="button" class="auth-back-btn" id="forgot-back-btn">← Back to Sign In</button>
+                </div>
+                <div id="forgot-step2" class="hidden">
+                    <p class="auth-otp-info">Enter the code sent to your email and set a new password.</p>
+                    <div class="auth-otp-row">
+                        <input type="text" class="auth-otp-input" id="forgot-otp" placeholder="000000" maxlength="6" inputmode="numeric" pattern="[0-9]*">
+                    </div>
+                    <div class="auth-form-group">
+                        <input type="password" id="forgot-new-pw" placeholder="New Password" minlength="6" required>
+                    </div>
+                    <button class="btn btn-primary auth-submit" id="forgot-reset-btn">Reset Password</button>
+                    <p class="auth-error" id="auth-error-forgot2"></p>
+                </div>
+            </div>
+        </div>
+        <div class="auth-profile hidden" id="auth-profile">
+            <div class="auth-header">
+                <div class="auth-avatar">👤</div>
+                <h3 id="profile-name">User</h3>
+                <p id="profile-email" class="profile-detail"></p>
+                <p id="profile-age" class="profile-detail"></p>
+                <p id="profile-gender" class="profile-detail"></p>
+            </div>
+            <button class="btn btn-primary auth-submit" id="logout-btn">Sign Out</button>
+        </div>
+    </div>
+</div>
+
+<script src="supabase.js"></script>
 <script src="script.js"></script>
 
 </body> 
