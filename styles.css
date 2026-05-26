@@ -160,7 +160,7 @@ a { text-decoration: none; color: inherit; transition: var(--transition); cursor
 
 .product-price { padding: 0 1.5rem 1rem; color: var(--primary); font-weight: 600; font-size: 1.25rem; }
 
-.btn-add { width: calc(100% - 3rem); margin: 0 1.5rem 1.5rem; padding: 0.75rem; background: var(--primary); color: var(--bg-primary); border: none; text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.8rem; transition: var(--transition); }
+.btn-add { width: calc(100% - 3rem); margin: 0 1.5rem 1.5rem; padding: 0.75rem; background: var(--primary); color: var(--bg-primary); border: none; text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.8rem; transition: var(--transition); cursor: none;}
 
 .btn-add:hover { background: var(--primary-dark); }
 
@@ -196,13 +196,13 @@ a { text-decoration: none; color: inherit; transition: var(--transition); cursor
 
 .contact-form { display: flex; flex-direction: column; gap: 1.5rem; }
 
-.form-group input, .form-group textarea { width: 100%; padding: 1.25rem; border: 1px solid rgba(255, 255, 255, 0.2); background: rgba(255, 255, 255, 0.1); color: var(--bg-primary); font-family: 'Inter', sans-serif; font-size: 1rem; transition: var(--transition); }
+.form-group input, .form-group textarea { width: 100%; padding: 1.25rem; border: 1px solid rgba(255, 255, 255, 0.2); background: rgba(255, 255, 255, 0.1); color: var(--bg-primary); font-family: 'Inter', sans-serif; font-size: 1rem; transition: var(--transition); cursor: none;}
 
 .form-group input::placeholder, .form-group textarea::placeholder { color: var(--secondary); }
 
 .form-group input:focus, .form-group textarea:focus { outline: none; border-color: var(--bg-primary); background: rgba(255, 255, 255, 0.15); }
 
-.contact .btn-primary { background: var(--bg-primary); color: var(--primary); }
+.contact .btn-primary { background: var(--bg-primary); color: var(--primary); cursor: none;}
 
 .contact .btn-primary:hover { background: var(--secondary); }
 
