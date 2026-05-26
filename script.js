@@ -112,35 +112,57 @@ window.addEventListener('mousemove', function(e) {
 const contactForm = document.querySelector('.contact-form');
 
 if (contactForm) {
-    contactForm.addEventListener('submit', function(e) {
+    contactForm.addEventListener('submit', async function(e) {
         e.preventDefault();
         
-        // Simple form validation
-        const inputs = this.querySelectorAll('input, textarea');
-        let valid = true;
+        const nameInput = this.querySelector('input[type="text"]');
+        const emailInput = this.querySelector('input[type="email"]');
+        const messageInput = this.querySelector('textarea');
+        const name = nameInput.value.trim();
+        const email = emailInput.value.trim();
+        const message = messageInput.value.trim();
         
-        inputs.forEach(input => {
-            if (!input.value.trim()) {
-                valid = false;
-                input.style.borderColor = '#ff6b6b';
-            } else {
-                input.style.borderColor = 'rgba(255, 255, 255, 0.2)';
-            }
+        if (!name || !email || !message) {
+            [nameInput, emailInput, messageInput].forEach(input => {
+                if (!input.value.trim()) input.style.borderColor = '#ff6b6b';
+                else input.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+            });
+            return;
+        }
+        
+        const btn = this.querySelector('button[type="submit"]');
+        btn.textContent = 'Sending...';
+        btn.disabled = true;
+        
+        const { error } = await supabaseClient.from('contact_messages').insert({
+            name,
+            email,
+            message
         });
         
-        if (valid) {
-            // Show success message
-            const btn = this.querySelector('button[type="submit"]');
-            const originalText = btn.textContent;
-            btn.textContent = 'Message Sent!';
-            btn.style.background = '#4CAF50';
-            
+        btn.disabled = false;
+        
+        if (error) {
+            btn.textContent = 'Failed to Send';
+            btn.style.background = '#d1453b';
             setTimeout(() => {
-                btn.textContent = originalText;
+                btn.textContent = 'Send Message';
                 btn.style.background = '';
-                this.reset();
             }, 3000);
+            return;
         }
+        
+        btn.textContent = 'Message Sent!';
+        btn.style.background = '#4CAF50';
+        
+        setTimeout(() => {
+            btn.textContent = 'Send Message';
+            btn.style.background = '';
+            this.reset();
+            [nameInput, emailInput, messageInput].forEach(input => {
+                input.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+            });
+        }, 3000);
     });
 }
 
@@ -192,4 +214,385 @@ document.addEventListener('mousemove', (e) => { cursor.style.left = e.clientX - 
 
 document.querySelectorAll('a, button').forEach(el => { el.addEventListener('mouseenter', () => cursor.classList.add('hover')); el.addEventListener('mouseleave', () => cursor.classList.remove('hover')); });
 
+// Auth System
+const authOverlay = document.getElementById('auth-overlay');
+const authClose = document.getElementById('auth-close');
+const profileIcon = document.getElementById('profile-icon');
+const loginForm = document.getElementById('login-form');
+const signupStep1 = document.getElementById('signup-step1');
+const signupStep2 = document.getElementById('signup-step2');
+const forgotForm = document.getElementById('forgot-form');
+const authTabs = document.querySelectorAll('.auth-tab');
+const authFormContainer = document.getElementById('auth-form-container');
+const authProfile = document.getElementById('auth-profile');
+const profileName = document.getElementById('profile-name');
+const profileEmail = document.getElementById('profile-email');
+const profileAge = document.getElementById('profile-age');
+const profileGender = document.getElementById('profile-gender');
+const logoutBtn = document.getElementById('logout-btn');
+
+const authError = document.getElementById('auth-error');
+const authErrorSignup = document.getElementById('auth-error-signup');
+const authErrorOtp = document.getElementById('auth-error-otp');
+const authErrorForgot = document.getElementById('auth-error-forgot');
+const authErrorForgot2 = document.getElementById('auth-error-forgot2');
+
+const forgotBtn = document.getElementById('forgot-btn');
+const forgotBackBtn = document.getElementById('forgot-back-btn');
+const forgotSendBtn = document.getElementById('forgot-send-btn');
+const forgotResetBtn = document.getElementById('forgot-reset-btn');
+const forgotEmail = document.getElementById('forgot-email');
+const forgotOtp = document.getElementById('forgot-otp');
+const forgotNewPw = document.getElementById('forgot-new-pw');
+const forgotStep1 = document.getElementById('forgot-step1');
+const forgotStep2 = document.getElementById('forgot-step2');
+
+const signupOtp = document.getElementById('signup-otp');
+const signupVerifyBtn = document.getElementById('signup-verify-btn');
+const signupBackBtn = document.getElementById('signup-back-btn');
+const signupEmailDisplay = document.getElementById('signup-email-display');
+
+let pendingSignupData = null;
+let isAwaitingSignupOtp = false;
+
+function showError(el, msg) {
+    el.textContent = msg;
+    setTimeout(() => { el.textContent = ''; }, 4000);
+}
+
+function openAuthModal() {
+    authOverlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeAuthModal() {
+    authOverlay.classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+function displayProfile(user) {
+    const meta = user.user_metadata || {};
+    profileName.textContent = meta.full_name || 'AURA Member';
+    profileEmail.textContent = user.email;
+    profileAge.textContent = meta.age ? `Age: ${meta.age}` : '';
+    profileGender.textContent = meta.gender ? `Gender: ${meta.gender}` : '';
+    authFormContainer.classList.add('hidden');
+    authProfile.classList.remove('hidden');
+}
+
+function resetAuthForms() {
+    loginForm.reset();
+    signupStep1.reset();
+    signupOtp.value = '';
+    forgotEmail.value = '';
+    forgotOtp.value = '';
+    forgotNewPw.value = '';
+    signupStep1.classList.remove('hidden');
+    signupStep2.classList.add('hidden');
+    forgotForm.classList.add('hidden');
+    forgotStep1.classList.remove('hidden');
+    forgotStep2.classList.add('hidden');
+    isAwaitingSignupOtp = false;
+    pendingSignupData = null;
+}
+
+profileIcon.addEventListener('click', function(e) {
+    e.preventDefault();
+    checkSession();
+});
+
+authClose.addEventListener('click', closeAuthModal);
+
+authOverlay.addEventListener('click', function(e) {
+    if (e.target === authOverlay) closeAuthModal();
+});
+
+authTabs.forEach(tab => {
+    tab.addEventListener('click', function() {
+        authTabs.forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+        const target = this.dataset.tab;
+        loginForm.classList.toggle('hidden', target !== 'login');
+        signupStep1.classList.toggle('hidden', target !== 'signup');
+        signupStep2.classList.add('hidden');
+        forgotForm.classList.add('hidden');
+        authError.textContent = '';
+        authErrorSignup.textContent = '';
+        authErrorOtp.textContent = '';
+        isAwaitingSignupOtp = false;
+        pendingSignupData = null;
+    });
+});
+
+// Sign In
+loginForm.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const email = this.querySelector('input[type="email"]').value;
+    const password = this.querySelector('input[type="password"]').value;
+    const btn = this.querySelector('.auth-submit');
+    btn.textContent = 'Signing In...';
+    btn.disabled = true;
+
+    const { data, error } = await supabaseClient.auth.signInWithPassword({
+        email,
+        password
+    });
+
+    btn.textContent = 'Sign In';
+    btn.disabled = false;
+
+    if (error) {
+        showError(authError, error.message);
+        return;
+    }
+
+    closeAuthModal();
+    loginForm.reset();
+});
+
+// Sign Up Step 1
+signupStep1.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const name = this.querySelector('input[name="name"]').value;
+    const email = this.querySelector('input[name="email"]').value;
+    const password = this.querySelector('input[name="password"]').value;
+    const age = parseInt(this.querySelector('input[name="age"]').value, 10);
+    const gender = this.querySelector('select[name="gender"]').value;
+
+    if (age < 10 || age > 80) {
+        showError(authErrorSignup, 'Age must be between 10 and 80.');
+        return;
+    }
+
+    const btn = this.querySelector('.auth-submit');
+    btn.textContent = 'Creating Account...';
+    btn.disabled = true;
+
+    const { data, error } = await supabaseClient.auth.signUp({
+        email,
+        password,
+        options: {
+            data: {
+                full_name: name,
+                age: String(age),
+                gender
+            }
+        }
+    });
+
+    btn.textContent = 'Create Account';
+    btn.disabled = false;
+
+    if (error) {
+        showError(authErrorSignup, error.message);
+        return;
+    }
+
+    pendingSignupData = { email, name, age: String(age), gender };
+
+    // If user was auto-confirmed, explicitly send an OTP via signInWithOtp
+    if (data?.session) {
+        await supabaseClient.auth.signOut();
+        await supabaseClient.auth.signInWithOtp({ email });
+    }
+
+    isAwaitingSignupOtp = true;
+    signupEmailDisplay.textContent = email;
+    signupStep1.classList.add('hidden');
+    signupStep2.classList.remove('hidden');
+    authErrorSignup.textContent = '';
+    setTimeout(() => signupOtp.focus(), 100);
+});
+
+// Sign Up Step 2 - Verify OTP
+signupVerifyBtn.addEventListener('click', async function() {
+    const token = signupOtp.value.trim();
+    if (!token || token.length < 6) {
+        showError(authErrorOtp, 'Please enter the full 6-digit code.');
+        return;
+    }
+    if (!pendingSignupData) {
+        showError(authErrorOtp, 'Session expired. Please sign up again.');
+        return;
+    }
+
+    this.textContent = 'Verifying...';
+    this.disabled = true;
+
+    // Allow SIGNED_IN to show profile after successful verification
+    isAwaitingSignupOtp = false;
+
+    const { data, error } = await supabaseClient.auth.verifyOtp({
+        email: pendingSignupData.email,
+        token,
+        type: 'email'
+    });
+
+    this.textContent = 'Verify Email';
+    this.disabled = false;
+
+    if (error) {
+        isAwaitingSignupOtp = true;
+        showError(authErrorOtp, error.message);
+        return;
+    }
+
+    await supabaseClient.auth.updateUser({
+        data: {
+            full_name: pendingSignupData.name,
+            age: pendingSignupData.age,
+            gender: pendingSignupData.gender
+        }
+    });
+
+    await supabaseClient.from('profiles').upsert({
+        id: (await supabaseClient.auth.getUser()).data.user.id,
+        email: pendingSignupData.email,
+        full_name: pendingSignupData.name,
+        age: pendingSignupData.age,
+        gender: pendingSignupData.gender
+    });
+
+    pendingSignupData = null;
+    signupStep2.classList.add('hidden');
+    signupOtp.value = '';
+});
+
+// Sign Up Step 2 - Back
+signupBackBtn.addEventListener('click', function() {
+    signupStep2.classList.add('hidden');
+    signupStep1.classList.remove('hidden');
+    authErrorOtp.textContent = '';
+    isAwaitingSignupOtp = false;
+    pendingSignupData = null;
+});
+
+// Forgot Password Button
+forgotBtn.addEventListener('click', function() {
+    loginForm.classList.add('hidden');
+    forgotForm.classList.remove('hidden');
+    authError.textContent = '';
+    authErrorForgot.textContent = '';
+});
+
+forgotBackBtn.addEventListener('click', function() {
+    forgotForm.classList.add('hidden');
+    loginForm.classList.remove('hidden');
+    forgotStep1.classList.remove('hidden');
+    forgotStep2.classList.add('hidden');
+    forgotEmail.value = '';
+    forgotOtp.value = '';
+    forgotNewPw.value = '';
+});
+
+// Forgot Step 1 - Send Reset Code
+forgotSendBtn.addEventListener('click', async function() {
+    const email = forgotEmail.value.trim();
+    if (!email) {
+        showError(authErrorForgot, 'Please enter your email.');
+        return;
+    }
+
+    this.textContent = 'Sending...';
+    this.disabled = true;
+
+    const { error } = await supabaseClient.auth.resetPasswordForEmail(email);
+
+    this.textContent = 'Send Reset Code';
+    this.disabled = false;
+
+    if (error) {
+        showError(authErrorForgot, error.message);
+        return;
+    }
+
+    forgotStep1.classList.add('hidden');
+    forgotStep2.classList.remove('hidden');
+    authErrorForgot.textContent = '';
+    setTimeout(() => forgotOtp.focus(), 100);
+});
+
+// Forgot Step 2 - Verify OTP & Reset Password
+forgotResetBtn.addEventListener('click', async function() {
+    const email = forgotEmail.value.trim();
+    const token = forgotOtp.value.trim();
+    const newPassword = forgotNewPw.value;
+
+    if (!token || token.length < 6) {
+        showError(authErrorForgot2, 'Please enter the full 6-digit code.');
+        return;
+    }
+    if (!newPassword || newPassword.length < 6) {
+        showError(authErrorForgot2, 'Password must be at least 6 characters.');
+        return;
+    }
+
+    this.textContent = 'Resetting...';
+    this.disabled = true;
+
+    const { data, error } = await supabaseClient.auth.verifyOtp({
+        email,
+        token,
+        type: 'recovery'
+    });
+
+    if (error) {
+        this.textContent = 'Reset Password';
+        this.disabled = false;
+        showError(authErrorForgot2, error.message);
+        return;
+    }
+
+    const { error: updateError } = await supabaseClient.auth.updateUser({
+        password: newPassword
+    });
+
+    this.textContent = 'Reset Password';
+    this.disabled = false;
+
+    if (updateError) {
+        showError(authErrorForgot2, updateError.message);
+        return;
+    }
+
+    forgotOtp.value = '';
+    forgotNewPw.value = '';
+});
+
+// Logout
+logoutBtn.addEventListener('click', async function() {
+    await supabaseClient.auth.signOut();
+    authProfile.classList.add('hidden');
+    authFormContainer.classList.remove('hidden');
+    closeAuthModal();
+});
+
+async function checkSession() {
+    const { data: { session } } = await supabaseClient.auth.getSession();
+
+    if (session) {
+        displayProfile(session.user);
+        openAuthModal();
+    } else {
+        resetAuthForms();
+        loginForm.classList.remove('hidden');
+        signupStep1.classList.add('hidden');
+        authProfile.classList.add('hidden');
+        authFormContainer.classList.remove('hidden');
+        openAuthModal();
+    }
+}
+
+supabaseClient.auth.onAuthStateChange((event, session) => {
+    if (event === 'SIGNED_IN' && !isAwaitingSignupOtp) {
+        if (authOverlay.classList.contains('active')) {
+            displayProfile(session.user);
+        }
+    }
+    if (event === 'USER_UPDATED') {
+        if (authOverlay.classList.contains('active') && session) {
+            displayProfile(session.user);
+        }
+    }
+});
 
