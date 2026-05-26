@@ -321,6 +321,7 @@ section {
 }
 
 /* Auth Modal */
+
 .auth-overlay {
     position: fixed;
     top: 0;
@@ -370,6 +371,7 @@ section {
     transition: var(--transition);
     font-family: 'Inter', sans-serif;
     line-height: 1;
+    cursor: none;
 }
 
 .auth-close:hover {
@@ -418,6 +420,7 @@ section {
     transition: var(--transition);
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    cursor: none;
 }
 
 .auth-tab.active {
@@ -535,6 +538,7 @@ section {
     text-align: center;
     width: 100%;
     margin-top: -0.5rem;
+    cursor: none;
 }
 
 .auth-forgot-btn:hover {
@@ -624,4 +628,14 @@ h1 { font-size: 2.5rem; } h2 { font-size: 2rem; }
     flex-direction: column;
     gap: 1.5rem;
 }
+}
+.btn{
+    cursor: none;
+}
+
+.auth-form-group input{
+    cursor: none;
+}
+.auth-form-group select{
+    cursor: none;
 }
