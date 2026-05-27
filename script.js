@@ -8,14 +8,54 @@ window.addEventListener('load', function() {
 
 // Product data
 const products = [
-    { name: "Crystal Singing Bowl", price: 128, image: "https://images.unsplash.com/photo-1593811167562-9cef47bfc4d7?q=80&w=1472&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" },
-    { name: "Lavender Essential Oil Set", price: 48, image: "https://images.unsplash.com/photo-1565552163943-efd9056f8dcb?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fGxhdmVuZGVyRXNzZW50aWFsJTIwT2lsJTIwc2V0fGVufDB8fDB8fHww" },
-    { name: "Handwoven Meditation Cushion", price: 89, image: "https://images.unsplash.com/photo-1723902499525-276eca2fc039?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTV8fEhhbmR3b3ZlbiUyME1lZGl0YXRpb24lMjBDdXNoaW9ufGVufDB8fDB8fHww" },
-    { name: "White Sage Smudge Bundle", price: 24, image: "https://images.unsplash.com/photo-1597717503010-ee19fef2db91?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8V2hpdGUlMjBTYWdlJTIwU211ZGdlJTIwQnVuZGxlfGVufDB8fDB8fHww" },
-    { name: "Diffuser and Essential Oils", price: 98, image: "https://images.unsplash.com/photo-1635575066917-e788c2bd06b7?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8ZXNzZW50aWFsJTIwb2lsJTIwZGlmZnVzZXJ8ZW58MHx8MHx8fDA%3D"},
-    { name: "Portable speaker - Nature sounds", price: 74, image: "https://images.unsplash.com/photo-1547052178-7f2c5a20c332?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTh8fG11c2ljJTIwc3BlYWtlcnxlbnwwfHwwfHx8MA%3D%3D"},
-    { name: "Hourglass for Meditation", price: 55, image: "https://images.unsplash.com/photo-1518281420975-50db6e5d0a97?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fHRpbWVyJTIwZm9yJTIwbWVkaXRhdGlvbnxlbnwwfHwwfHx8MA%3D%3D"},
-    { name: "Perfume", price: 78, image: "https://images.unsplash.com/photo-1733660227163-01bc46e0d7d7?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Njd8fHBlcmZ1bWV8ZW58MHx8MHx8fDA%3D" }
+    {
+        name: "Crystal Singing Bowl",
+        price: 128,
+        image: "https://images.unsplash.com/photo-1593811167562-9cef47bfc4d7?q=80&w=1472&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        description: "Handcrafted from pure quartz crystal, this singing bowl produces resonant tones that align your chakras and promote deep meditation. Each bowl is carefully tuned to the root chakra frequency, creating vibrations that cleanse negative energy and restore inner harmony."
+    },
+    {
+        name: "Lavender Essential Oil Set",
+        price: 48,
+        image: "https://images.unsplash.com/photo-1565552163943-efd9056f8dcb?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fGxhdmVuZGVyRXNzZW50aWFsJTIwT2lsJTIwc2V0fGVufDB8fDB8fHww",
+        description: "Immerse yourself in the calming embrace of organic lavender. This set includes three signature blends — pure lavender, lavender-chamomile, and lavender-sandalwood — each crafted to ease tension, promote restful sleep, and elevate your daily mindfulness ritual."
+    },
+    {
+        name: "Handwoven Meditation Cushion",
+        price: 89,
+        image: "https://images.unsplash.com/photo-1723902499525-276eca2fc039?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTV8fEhhbmR3b3ZlbiUyME1lZGl0YXRpb24lMjBDdXNoaW9ufGVufDB8fDB8fHww",
+        description: "Sourced from artisan communities in the Himalayas, this meditation cushion is filled with organic buckwheat hulls and wrapped in handwoven cotton. Its ergonomic design supports proper posture during extended meditation sessions, keeping your spine aligned and your mind at ease."
+    },
+    {
+        name: "White Sage Smudge Bundle",
+        price: 24,
+        image: "https://images.unsplash.com/photo-1597717503010-ee19fef2db91?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8V2hpdGUlMjBTYWdlJTIwU211ZGdlJTIwQnVuZGxlfGVufDB8fDB8fHww",
+        description: "Sustainably harvested in California, this white sage bundle is carefully sun-dried to preserve its purifying properties. Use it to cleanse your space of stagnant energy, set intentions, and create a sacred atmosphere for meditation and reflection."
+    },
+    {
+        name: "Diffuser and Essential Oils",
+        price: 98,
+        image: "https://images.unsplash.com/photo-1635575066917-e788c2bd06b7?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8ZXNzZW50aWFsJTIwb2lsJTIwZGlmZnVzZXJ8ZW58MHx8MHx8fDA%3D",
+        description: "Transform any room into a sanctuary with this ultrasonic diffuser. Featuring soft LED lighting and whisper-quiet operation, it comes with a curated set of three essential oil blends — Serenity, Clarity, and Grounding — to match your daily intention."
+    },
+    {
+        name: "Portable Speaker — Nature Sounds",
+        price: 74,
+        image: "https://images.unsplash.com/photo-1547052178-7f2c5a20c332?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTh8fG11c2ljJTIwc3BlYWtlcnxlbnwwfHwwfHx8MA%3D%3D",
+        description: "Crafted from bamboo and soft-touch silicone, this portable speaker delivers warm, immersive audio for your guided meditations and nature soundscapes. With 12 hours of battery life and an IPX5 water-resistant build, it accompanies you from your meditation corner to the great outdoors."
+    },
+    {
+        name: "Hourglass for Meditation",
+        price: 55,
+        image: "https://images.unsplash.com/photo-1518281420975-50db6e5d0a97?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fHRpbWVyJTIwZm9yJTIwbWVkaXRhdGlvbnxlbnwwfHwwfHx8MA%3D%3D",
+        description: "A beautiful 30-minute hourglass crafted from amber glass and polished acacia wood. Watch the fine sand flow as you ease into your practice — a gentle, screen-free timer that transforms your meditation into a visual ritual of presence and patience."
+    },
+    {
+        name: "Sacred Earth Perfume Oil",
+        price: 78,
+        image: "https://images.unsplash.com/photo-1733660227163-01bc46e0d7d7?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Njd8fHBlcmZ1bWV8ZW58MHx8MHx8fDA%3D",
+        description: "An earth-scented perfume oil blended with notes of sandalwood, frankincense, and cedar. Free from synthetics and alcohol, this grounding fragrance is designed to be applied to pulse points before meditation, helping you transition from the outer world to your inner sanctuary."
+    }
 ];
 
 // Navbar scroll effect
@@ -224,8 +264,8 @@ if (contactForm) {
 function renderProducts(gridId, list) {
     const grid = document.getElementById(gridId);
     if (!grid) return;
-    grid.innerHTML = list.map(p => `
-        <div class="product-card">
+    grid.innerHTML = list.map((p, i) => `
+        <div class="product-card" data-index="${i}">
             <div class="product-image">
                 <img src="${p.image}" alt="${p.name}" loading="lazy">
             </div>
@@ -844,5 +884,77 @@ supabaseClient.auth.onAuthStateChange((event, session) => {
             displayProfile(session.user);
         }
     }
+});
+
+// ====== PRODUCT DETAIL OVERLAY ======
+const productOverlay = document.getElementById('product-overlay');
+const productModalImg = document.getElementById('product-modal-img');
+const productModalTag = document.getElementById('product-modal-tag');
+const productModalName = document.getElementById('product-modal-name');
+const productModalPrice = document.getElementById('product-modal-price');
+const productModalDesc = document.getElementById('product-modal-desc');
+const productModalAdd = document.getElementById('product-modal-add');
+const productModalClose = document.getElementById('product-modal-close');
+
+function openProductDetail(index) {
+    const product = products[index];
+    if (!product) return;
+
+    productModalImg.src = product.image;
+    productModalImg.alt = product.name;
+    productModalTag.textContent = 'Calming Essential';
+    productModalName.textContent = product.name;
+    productModalPrice.textContent = '$' + product.price;
+    productModalDesc.textContent = product.description;
+    productModalAdd.dataset.name = product.name;
+    productModalAdd.dataset.price = product.price;
+    productModalAdd.dataset.image = product.image;
+    productModalAdd.textContent = 'Add to Cart — $' + product.price;
+
+    productOverlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeProductDetail() {
+    productOverlay.classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+// Open overlay on product card click (excluding Add to Cart button)
+document.addEventListener('click', function(e) {
+    const card = e.target.closest('.product-card');
+    if (!card) return;
+    if (e.target.closest('.btn-add')) return;
+
+    const index = parseInt(card.dataset.index);
+    if (!isNaN(index)) {
+        openProductDetail(index);
+    }
+});
+
+productModalClose.addEventListener('click', closeProductDetail);
+
+productOverlay.addEventListener('click', function(e) {
+    if (e.target === productOverlay) closeProductDetail();
+});
+
+// Add to Cart inside product detail overlay
+productModalAdd.addEventListener('click', function() {
+    const name = this.dataset.name;
+    const price = parseFloat(this.dataset.price);
+    const image = this.dataset.image;
+
+    if (!name || !price) return;
+
+    addToCart(name, price, image);
+    renderCart();
+
+    const original = this.textContent;
+    this.textContent = 'Added to Cart!';
+    this.style.background = '#4CAF50';
+    setTimeout(() => {
+        this.textContent = original;
+        this.style.background = '';
+    }, 2000);
 });
 
