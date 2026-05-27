@@ -6,6 +6,18 @@ window.addEventListener('load', function() {
     }, 1000);
 });
 
+// Product data
+const products = [
+    { name: "Crystal Singing Bowl", price: 128, image: "https://images.unsplash.com/photo-1593811167562-9cef47bfc4d7?q=80&w=1472&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" },
+    { name: "Lavender Essential Oil Set", price: 48, image: "https://images.unsplash.com/photo-1565552163943-efd9056f8dcb?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fGxhdmVuZGVyRXNzZW50aWFsJTIwT2lsJTIwc2V0fGVufDB8fDB8fHww" },
+    { name: "Handwoven Meditation Cushion", price: 89, image: "https://images.unsplash.com/photo-1723902499525-276eca2fc039?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTV8fEhhbmR3b3ZlbiUyME1lZGl0YXRpb24lMjBDdXNoaW9ufGVufDB8fDB8fHww" },
+    { name: "White Sage Smudge Bundle", price: 24, image: "https://images.unsplash.com/photo-1597717503010-ee19fef2db91?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8V2hpdGUlMjBTYWdlJTIwU211ZGdlJTIwQnVuZGxlfGVufDB8fDB8fHww" },
+    { name: "Diffuser and Essential Oils", price: 98, image: "https://images.unsplash.com/photo-1635575066917-e788c2bd06b7?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8ZXNzZW50aWFsJTIwb2lsJTIwZGlmZnVzZXJ8ZW58MHx8MHx8fDA%3D"},
+    { name: "Portable speaker - Nature sounds", price: 74, image: "https://images.unsplash.com/photo-1547052178-7f2c5a20c332?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTh8fG11c2ljJTIwc3BlYWtlcnxlbnwwfHwwfHx8MA%3D%3D"},
+    { name: "Hourglass for Meditation", price: 55, image: "https://images.unsplash.com/photo-1518281420975-50db6e5d0a97?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fHRpbWVyJTIwZm9yJTIwbWVkaXRhdGlvbnxlbnwwfHwwfHx8MA%3D%3D"},
+    { name: "Perfume", price: 78, image: "https://images.unsplash.com/photo-1733660227163-01bc46e0d7d7?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Njd8fHBlcmZ1bWV8ZW58MHx8MHx8fDA%3D" }
+];
+
 // Navbar scroll effect
 const navbar = document.querySelector('.navbar');
 
@@ -51,7 +63,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 });
 
 // Active navigation link on scroll
-const sections = document.querySelectorAll('section');
+const sections = document.querySelectorAll('section[id]:not(.cart-section):not(.all-products-overlay)');
 
 window.addEventListener('scroll', function() {
     let current = '';
@@ -97,6 +109,48 @@ animateElements.forEach(el => {
     el.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
     observer.observe(el);
 });
+
+// Animated counters for stats
+function animateCounters() {
+    const statNumbers = document.querySelectorAll('.stat-number');
+    if (!statNumbers.length) return;
+
+    const counterObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            const el = entry.target;
+            const target = parseInt(el.dataset.target);
+            const suffix = el.dataset.suffix || '';
+            const needsDivision = target >= 1000;
+            const duration = 2000;
+            const startTime = performance.now();
+
+            function update(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const eased = 1 - Math.pow(1 - progress, 3);
+                const current = Math.floor(eased * target);
+
+                if (needsDivision) {
+                    el.textContent = Math.floor(current / 1000) + suffix;
+                } else {
+                    el.textContent = current + suffix;
+                }
+
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                }
+            }
+
+            requestAnimationFrame(update);
+            counterObserver.unobserve(el);
+        });
+    }, { threshold: 0.5 });
+
+    statNumbers.forEach(el => counterObserver.observe(el));
+}
+
+animateCounters();
 
 // Parallax effect for hero section
 const hero = document.querySelector('.hero');
@@ -165,6 +219,32 @@ if (contactForm) {
         }, 3000);
     });
 }
+
+// ====== PRODUCT RENDERING ======
+function renderProducts(gridId, list) {
+    const grid = document.getElementById(gridId);
+    if (!grid) return;
+    grid.innerHTML = list.map(p => `
+        <div class="product-card">
+            <div class="product-image">
+                <img src="${p.image}" alt="${p.name}" loading="lazy">
+            </div>
+            <h3>${p.name}</h3>
+            <p class="product-price">$${p.price}</p>
+            <button class="btn-add" data-name="${p.name}" data-price="${p.price}" data-image="${p.image}">Add to Cart</button>
+        </div>
+    `).join('');
+
+    grid.querySelectorAll('.product-card').forEach(card => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(30px)';
+        card.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+        observer.observe(card);
+    });
+}
+
+renderProducts('shop-products-grid', products.slice(0, 4));
+renderProducts('all-products-grid', products);
 
 // ====== CART SYSTEM ======
 let cart = JSON.parse(localStorage.getItem('aura-cart')) || [];
@@ -250,24 +330,25 @@ function addToCart(name, price, image) {
     saveCart();
 }
 
-// Add to Cart buttons
-document.querySelectorAll('.btn-add').forEach(btn => {
-    btn.addEventListener('click', function() {
-        const name = this.dataset.name;
-        const price = parseFloat(this.dataset.price);
-        const image = this.dataset.image;
+// Add to Cart (event delegation)
+document.addEventListener('click', function(e) {
+    const btn = e.target.closest('.btn-add');
+    if (!btn) return;
 
-        addToCart(name, price, image);
-        renderCart();
+    const name = btn.dataset.name;
+    const price = parseFloat(btn.dataset.price);
+    const image = btn.dataset.image;
 
-        const original = this.textContent;
-        this.textContent = 'Added!';
-        this.style.background = '#4CAF50';
-        setTimeout(() => {
-            this.textContent = original;
-            this.style.background = '';
-        }, 2000);
-    });
+    addToCart(name, price, image);
+    renderCart();
+
+    const original = btn.textContent;
+    btn.textContent = 'Added!';
+    btn.style.background = '#4CAF50';
+    setTimeout(() => {
+        btn.textContent = original;
+        btn.style.background = '';
+    }, 2000);
 });
 
 // Cart icon toggle
@@ -289,6 +370,23 @@ document.getElementById('cart-close').addEventListener('click', function(e) {
 document.getElementById('cart-shop-link').addEventListener('click', function(e) {
     e.preventDefault();
     cartSection.classList.remove('active');
+    document.body.style.overflow = '';
+});
+
+// All Products overlay toggle
+const allProductsSection = document.getElementById('all-products');
+
+document.getElementById('view-all-btn').addEventListener('click', function(e) {
+    e.preventDefault();
+    allProductsSection.classList.add('active');
+    document.body.classList.add('all-products-open');
+    document.body.style.overflow = 'hidden';
+});
+
+document.getElementById('all-products-close').addEventListener('click', function(e) {
+    e.preventDefault();
+    allProductsSection.classList.remove('active');
+    document.body.classList.remove('all-products-open');
     document.body.style.overflow = '';
 });
 
