@@ -320,6 +320,13 @@ function renderCart() {
 
     if (!hasItems) return;
 
+    const count = cart.length;
+    if (window.innerWidth > 576) {
+        cartItems.style.gridTemplateColumns = count <= 2 ? 'repeat(2, 1fr)' : 'repeat(3, 1fr)';
+    } else {
+        cartItems.style.gridTemplateColumns = '';
+    }
+
     let subtotal = 0;
 
     cart.forEach((item, index) => {
