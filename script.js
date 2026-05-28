@@ -21,6 +21,18 @@ const products = [
         description: "Immerse yourself in the calming embrace of organic lavender. This set includes three signature blends — pure lavender, lavender-chamomile, and lavender-sandalwood — each crafted to ease tension, promote restful sleep, and elevate your daily mindfulness ritual."
     },
     {
+        name: "Sacred Earth Perfume Oil",
+        price: 78,
+        image: "https://images.unsplash.com/photo-1733660227163-01bc46e0d7d7?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Njd8fHBlcmZ1bWV8ZW58MHx8MHx8fDA%3D",
+        description: "An earth-scented perfume oil blended with notes of sandalwood, frankincense, and cedar. Free from synthetics and alcohol, this grounding fragrance is designed to be applied to pulse points before meditation, helping you transition from the outer world to your inner sanctuary."
+    },
+    {
+        name: "Diffuser and Essential Oils",
+        price: 98,
+        image: "https://images.unsplash.com/photo-1635575066917-e788c2bd06b7?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8ZXNzZW50aWFsJTIwb2lsJTIwZGlmZnVzZXJ8ZW58MHx8MHx8fDA%3D",
+        description: "Transform any room into a sanctuary with this ultrasonic diffuser. Featuring soft LED lighting and whisper-quiet operation, it comes with a curated set of three essential oil blends — Serenity, Clarity, and Grounding — to match your daily intention."
+    },
+    {
         name: "Handwoven Meditation Cushion",
         price: 89,
         image: "https://images.unsplash.com/photo-1723902499525-276eca2fc039?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTV8fEhhbmR3b3ZlbiUyME1lZGl0YXRpb24lMjBDdXNoaW9ufGVufDB8fDB8fHww",
@@ -33,12 +45,6 @@ const products = [
         description: "Sustainably harvested in California, this white sage bundle is carefully sun-dried to preserve its purifying properties. Use it to cleanse your space of stagnant energy, set intentions, and create a sacred atmosphere for meditation and reflection."
     },
     {
-        name: "Diffuser and Essential Oils",
-        price: 98,
-        image: "https://images.unsplash.com/photo-1635575066917-e788c2bd06b7?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8ZXNzZW50aWFsJTIwb2lsJTIwZGlmZnVzZXJ8ZW58MHx8MHx8fDA%3D",
-        description: "Transform any room into a sanctuary with this ultrasonic diffuser. Featuring soft LED lighting and whisper-quiet operation, it comes with a curated set of three essential oil blends — Serenity, Clarity, and Grounding — to match your daily intention."
-    },
-    {
         name: "Portable Speaker — Nature Sounds",
         price: 74,
         image: "https://images.unsplash.com/photo-1547052178-7f2c5a20c332?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTh8fG11c2ljJTIwc3BlYWtlcnxlbnwwfHwwfHx8MA%3D%3D",
@@ -49,12 +55,6 @@ const products = [
         price: 55,
         image: "https://images.unsplash.com/photo-1518281420975-50db6e5d0a97?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fHRpbWVyJTIwZm9yJTIwbWVkaXRhdGlvbnxlbnwwfHwwfHx8MA%3D%3D",
         description: "A beautiful 30-minute hourglass crafted from amber glass and polished acacia wood. Watch the fine sand flow as you ease into your practice — a gentle, screen-free timer that transforms your meditation into a visual ritual of presence and patience."
-    },
-    {
-        name: "Sacred Earth Perfume Oil",
-        price: 78,
-        image: "https://images.unsplash.com/photo-1733660227163-01bc46e0d7d7?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Njd8fHBlcmZ1bWV8ZW58MHx8MHx8fDA%3D",
-        description: "An earth-scented perfume oil blended with notes of sandalwood, frankincense, and cedar. Free from synthetics and alcohol, this grounding fragrance is designed to be applied to pulse points before meditation, helping you transition from the outer world to your inner sanctuary."
     }
 ];
 
@@ -496,6 +496,11 @@ const cursorStyle = document.createElement('style'); cursorStyle.textContent = `
     width: 40px;
     height: 40px;
     background: rgba(139, 115, 85, 0.1);
+}
+@media (max-width: 768px) {
+    .custom-cursor { display: none; }
+    body { cursor: auto; }
+    a, button, .btn-add, .form-group input, .form-group textarea { cursor: auto; }
 }`; 
 
 document.head.appendChild(cursorStyle);
